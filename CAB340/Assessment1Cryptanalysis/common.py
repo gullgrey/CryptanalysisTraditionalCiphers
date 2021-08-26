@@ -1,5 +1,3 @@
-# .lower()  .spit()  .replace(" ", "")
-
 def get_ciphertext(filename):
     """
     Retrieves ciphertext from a file.

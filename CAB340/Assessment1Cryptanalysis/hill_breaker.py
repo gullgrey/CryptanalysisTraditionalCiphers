@@ -1,34 +1,18 @@
 import itertools
-
 from common import *
 import numpy as np
 
 
-def get_hill_text(filename, words=0):
-    raw_text = get_ciphertext(filename)
-    space_positions = [i for i, letter in enumerate(raw_text) if letter == ' ']
-
-    if words == 0:
-        first_words = raw_text.split(" ")
-        text = ''.join(first_words).lower()
-        return text, space_positions
-    else:
-        first_words = raw_text.split(" ")[:words]
-        text = ''.join(first_words).lower()
-        if len(text) % 2 == 1:
-            text += 'a'
-        return text, space_positions[:words-1]
-
-
-def space_hill_text(hill_text, space_positions):
-    space_character = ' '
-    text = hill_text
-    for index in space_positions:
-        text = text[:index] + space_character + text[index:]
-    return text
-
-
 def hill_encode(key, text, key_size=2, a_position=97, alphabet_size=26):
+    """
+
+    :param key: np.array
+    :param text: string
+    :param key_size: int
+    :param a_position: int
+    :param alphabet_size: int
+    :return:
+    """
 
     # splits the text into blocks the length of the key
     text_blocks = [text[i:i+key_size] for i in range(0, len(text), key_size)]
@@ -46,15 +30,26 @@ def hill_encode(key, text, key_size=2, a_position=97, alphabet_size=26):
     return encoded_text
 
 
-def brute_force_hill(hill, word_amount=200, check_limit=30, words_to_compare=5, key_length=2):
+def brute_force_hill(hill, word_amount=200, max_key_value=10, words_to_compare=5, key_length=2):
+    """
+    Prints to console encoded text and key of a decrypted hill cipher segment if it contains at least "words_to_compare"
+    number of words from the first "word_amount" most common  words in the english language. It
+    iterates through all hill cipher keys of size "key_length" for every key element permutation in
+    range [0, "max_key_value"].
 
-    text = hill[0]
-    space_positions = hill[1]
+    :param hill: Hill object
+    :param word_amount: int
+    :param max_key_value: int
+    :param words_to_compare: int
+    :param key_length: int
+    :return: None
+    """
+
+    text = hill.text
 
     english = get_ciphertext('english.txt').split('\n')
     word_check = english[:word_amount]
     repeat = key_length * key_length
-    # current_key = np.array([[0, 0], [0, 0]])
 
     def _perm_to_array(perm):
         index = 0
@@ -64,12 +59,11 @@ def brute_force_hill(hill, word_amount=200, check_limit=30, words_to_compare=5, 
             index += key_length
         return np.array(perm_list)
 
-    for permutation in itertools.product(range(check_limit), repeat=repeat):
+    for permutation in itertools.product(range(max_key_value), repeat=repeat):
 
-        # print(permutation)
         raw_encode = hill_encode(_perm_to_array(permutation), text)
-        # print(_perm_to_array(permutation))
-        encoded_text = space_hill_text(raw_encode, space_positions).split(' ')
+
+        encoded_text = hill.reformat_text(raw_encode, capitals=False).split(' ')
         english_count = 0
         for word in encoded_text:
             if word in word_check:
@@ -78,7 +72,3 @@ def brute_force_hill(hill, word_amount=200, check_limit=30, words_to_compare=5, 
                 print(encoded_text)
                 print(permutation)
                 break
-
-
-
-
