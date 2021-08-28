@@ -47,7 +47,7 @@ def brute_force_hill(hill, word_amount=200, max_key_value=10, words_to_compare=5
 
     text = hill.text
 
-    english = get_ciphertext('english.txt').split('\n')
+    english = get_text('english.txt').split('\n')
     word_check = english[:word_amount]
     repeat = key_length * key_length
 

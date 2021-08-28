@@ -1,4 +1,4 @@
-from common import get_ciphertext
+from common import get_text
 
 
 class LowerCaseOnly:
@@ -13,7 +13,7 @@ class LowerCaseOnly:
         :param word_number:
         :return:
         """
-        raw_text = get_ciphertext(filename)
+        raw_text = get_text(filename)
         space_positions = [i for i, letter in enumerate(raw_text) if letter == ' ']
         self.capital_positions = [i for i, letter in enumerate(raw_text) if letter.isupper()]
 

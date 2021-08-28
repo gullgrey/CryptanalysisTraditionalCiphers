@@ -1,4 +1,4 @@
-def get_ciphertext(filename):
+def get_text(filename):
     """
     Retrieves ciphertext from a file.
 
@@ -10,3 +10,11 @@ def get_ciphertext(filename):
     path = "data/" + filename
     cipher_file = open(path, "r")
     return cipher_file.read()
+
+
+def save_text(filename, text):
+
+    path = "data/" + filename
+    file = open(path, "w")
+    file.write(text)
+    file.close()
