@@ -22,10 +22,11 @@ class LowerCaseOnly:
             text = ''.join(first_words).lower()
             self.space_positions = space_positions
         else:
-            first_words = raw_text.split(" ")[:word_number]
+            first_words = raw_text.split(" ")[-word_number:]
             text = ''.join(first_words).lower()
-            if len(text) % 2 == 1:
-                text += 'a'
+            text = text[:-1]
+            # if len(text) % 2 == 1:
+            #     text += 'a'
             self.space_positions = space_positions[:word_number - 1]
 
         self.text = text
