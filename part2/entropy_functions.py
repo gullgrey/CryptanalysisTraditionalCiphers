@@ -2,12 +2,12 @@ from math import log, log2
 
 
 def entropy_1(bits, q):
-    prob_key_0 = q + (1 / 2**bits)
-    prob_key_i = (1 - prob_key_0) / ((2 ** bits) - 1)
+    prob_key_0 = q + ((1 - q) / 2**bits)
+    # prob_key_i = (1 - prob_key_0) / ((2 ** bits) - 1)
+    prob_key_i = ((1 - q) / 2**bits)
 
-    # return (prob_key_0 * log(1 / prob_key_0, 2)) + (prob_key_i * ((2 ** bits) - 1) * log(1 / prob_key_i, 2))
-
-    return -((prob_key_0 * log(prob_key_0, 2)) + ((1 - prob_key_0) * log(prob_key_i, 2)))
+    # return -((prob_key_0 * log(prob_key_0, 2)) + ((1 - prob_key_0) * log(prob_key_i, 2)))
+    return -((prob_key_0 * log(prob_key_0, 2)) + ((2**bits - 1) * prob_key_i * log(prob_key_i, 2)))
 
 
 def entropy_2(bits, q):
@@ -32,7 +32,8 @@ def conditional_entropy(bits, q):
         return prob * conditional * log2(prob * conditional)
     joint_prob = -(element_entropy(prob_k0_f1, prob_f1) + element_entropy(prob_k0_f0, prob_f0)
                    + (((2**bits) - 1) * element_entropy(prob_ki_f0, prob_f0)))
-    return joint_prob - entropy_1(bits, q)
+    # return joint_prob - entropy_1(bits, q)
+    return -((q*log2(q)) + ((1-q)*log2((1-q)/2**bits))) - entropy_1(bits, q)
 
     # prob_key_0 = q + (1 / 2**bits)
     # return -((q * log2(q)) + (((1 - q) / 2**bits) * log2((1 - q) / (2**bits))) + ((1 - q) * log2((1 - q) / ((2 ** bits) - 1)))) + \
